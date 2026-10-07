@@ -89,53 +89,50 @@ const app2 = (function() {
     function getChordFromInput(value) {
         // Clean input
         value = value
+            .replace(/^([a-z]) ([b#][0-9])/i, '$1M$2')
             .replace(/ /g, '')
             .replace(/add/ig, '&')
-            .replace(/o|°|dim/ig, 'd')
-            .replace(/\+|aug/ig, 'a')
-            .replace(/minor|min/ig, 'm')
-            .replace(/min|\-/ig, 'm')
+            .replace(/m?(o|°|diminished|dim)/ig, 'mb5')
+            .replace(/m?(ø|halfdiminished|halfdim)/ig, 'mb5m7')
+            .replace(/altered|alt/i,'M7#5')
+            .replace(/\+|aug|augmented/ig, '#5')
+            .replace(/minor|min|\-/ig, 'm')
             .replace(/major|maj|Δ|\^/ig, 'n')
             .replace(/M/g, 'n')
-            .replace(/sus4?/ig, 's')
+            .replace(/sus(pend(ed)?)?([24])?/ig, 's$3')
             .replace(/sharp/ig, '#')
             .replace(/flat|♭/ig, 'b')
             .replace(/\\/ig, '\/')
             .toLowerCase();
         
         // Error
-        if (
-            !value.match(/^[a-g][0-9nms#bad&]*(\/[a-g][#b]?)?$/) ||
-            value[0].match(/[^a-g]/)
-        ) {
+        if (!value.match(/^[a-g][0-9nmb#s]*(&[0-9nmb#]*)?(\/[a-g][#b]?)?$/)) {
             return;
         }
-        
+
         let chord = [];
         
         // Root note
-        let root = value.match(/^[a-g][b|#]?/)[0];
+        let root = value.match(/^[a-g][b#]*/)[0];
         value = value.substring(root.length);
         root = getNoteValue(root);
         chord.push({ value: root, label: 'R' });
         
         // Third
-        if (value.match(/^n[0-9]/)) {
-            // Avoid confusion with maj7 chords
-            value = 'n' + value;
-        }
-        if (value[0] === 'm' || value[0] === 'd') {
+        value = value.replace(/^([nm]?)([0-9]+)/, (_, m1, m2) => m1 + (m1 || 'n') + m2);
+        
+        if (value[0] === 'm') {
             chord.push({
                 value: root + 3,
                 label: 'm3'
             });
-            value = value.substring(1);
+            value = value.replace(/^m/, '');
         } else if (value.match(/s2/)) {
             chord.push({ value: root + 2, label: 'M2' });
             value = value.replace('s2', '');
         } else if (value[0] === 's') {
             chord.push({ value: root + 5, label: '4' });
-            value = value.replace('s', '');
+            value = value.replace(/s4?/, '');
         } else {
             chord.push({ value: root + 4, label: 'M3' });
             if (value[0] == 'n') {
@@ -144,15 +141,17 @@ const app2 = (function() {
         }
         
         // Fifth
-        if (value[0] === 'a') {
-            value = value.substring(1);
+        preAdd = value.split('&')[0];
+        if (preAdd.match('#5')) {
             chord.push({ value: root + 8, label: 'A5' });
-        } else if (value[0] === 'd') {
-            value = value.substring(1);
+            value = value.replace(preAdd, preAdd.replace(/#5/g, ''));
+        } else if (preAdd.match('b5')) {
             chord.push({ value: root + 6, label: 'D5' });
+            value = value.replace(preAdd, preAdd.replace(/b5/g, ''));
         } else {
             chord.push({ value: root + 7, label: '5' });
         }
+
         
         // Extensions
         const EX = 
@@ -238,13 +237,13 @@ const app2 = (function() {
     }
 
     function getNoteValue(note) {
-        let v = NOTE_VALUES[note[0]];
-        v += note[1] === '#'
-            ? 1
-            : note[1] === 'b'
-            ? -1
-            : 0;
-        return v === -1 ? 11 : v;
+        const VALUE =
+            NOTE_VALUES[note[0]] +
+            note
+                .substring(1)
+                .split('')
+                .reduce((acc, n) => acc + (n === 'b' ? -1 : n === '#' ? 1 : 0), 0);
+        return (VALUE + 12) % 12;
     }
 
     function setStringValues(value) {
@@ -578,7 +577,7 @@ const app2 = (function() {
                         &times;
                     </button>
                     <div class="table-container">
-                        <table class="app2-table" ${START ? 'class="mid"' : ''}>${
+                        <table class="app2-table${START ? ' mid' : ''}">${
                             v.frets.reduce((sHtml, f, si) => {
                                 sHtml += '<tr>';
                                 for (let i = START; i <= START + FRETS; i++) {

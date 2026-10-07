@@ -27,7 +27,8 @@ const app1 = (function() {
             '4': '4th',
             '5': '5th',
             '6': '6th',
-            '7': '7th'
+            '7': '7th',
+            '9': '9th'
         },
         CHORD_NAMES_FULL = [
             ['o', ' diminished ', 'dim'],
@@ -37,17 +38,13 @@ const app1 = (function() {
             ['+7', ' augmented 7 ', 'aug7'],
             ['+9', ' augmented 9 ', 'aug9'],
             ['+', ' augmented ', 'aug'],
-            ['♭9', ' ♭n', '♭n'],
-            ['♭7', ' ♭s', '♭s'],
-            ['#9', ' #n', '#n'],
-            ['#7', ' #s', '#s'],
-            ['7', ' min7', 'm7'],
-            ['9', ' min9', 'm9'],
-            ['♭n', ' ♭9', '♭9'],
-            ['♭s', ' ♭7', '♭7'],
-            ['#n', ' #9', '#9'],
-            ['#s', ' #7', '#7'],
-            ['alt', ' maj7 ♭9', 'M7♭9']
+            ['♭9', ' ♭9', 'b9'],
+            ['♭7', ' ♭7', 'b7'],
+            ['#9', ' #9', '#9'],
+            ['#7', ' #7', '#7'],
+            ['m dim', ' dim'],
+            ['m hal', ' hal'],
+            ['alt', ' maj9 #5', 'M9#5']
             
         ],
         CHORD_NUMS = [
@@ -280,7 +277,7 @@ const app1 = (function() {
         Object
             .keys(INTERVAL_NAMES_FULL)
             .forEach(i => interval = interval.replace(i, INTERVAL_NAMES_FULL[i]));
-        return interval;
+        return interval.replace('/', ' / ');
     }
 
     function setCurrentKey(key) {
@@ -389,13 +386,16 @@ const app1 = (function() {
                     ) + '>';
                     const N = currentNotes.find(n => n.value === (s + f) % 12);
                     if (N) {
-                        const EL = 
-                            currentChord > -1 &&
-                            currentChords[currentChord].notes.includes(N.value)
+                        const
+                            IS_NINTH = currentChords[currentChord]?.notes.length >= 5 && N.label[1] === '2',
+                            LABEL = IS_NINTH
+                                ? `${N.label}/9`
+                                : N.label,
+                            EL = currentChords[currentChord]?.notes.includes(N.value)
                                 ? 'b' : 'i';
-                        sHtml += `<${EL}>
-                            ${N.label}
-                            <span>${getFullIntervalName(N.label)}</span>
+                        sHtml += `<${EL}${IS_NINTH ? ' class="ninth"' : ''}>
+                            ${LABEL}
+                            <span>${getFullIntervalName(LABEL)}</span>
                         </${EL}>`;
                     }
                     sHtml += '</td>';
@@ -471,8 +471,12 @@ const app1 = (function() {
             CHORD_NAMES_FULL
                 .filter(sym => sym[2])
                 .forEach(sym => chordShort = chordShort.replace(sym[1], sym[2]));
-            chordShort = chordShort.replace(/ /g, '');
-            chordShort = chordShort.replace(/mm/g, 'm');
+            chordShort = chordShort
+                .replace(/ /g, '')
+                .replace(/maj/g, 'M')
+                .replace(/min/g, 'm')
+                .replace(/mm/g, 'm')
+                .replace(/MM/g, 'M');
 
             desc.push(
                 '<span class="music-note">' +

@@ -114,6 +114,7 @@ input.error {
 }
 .app2-table.mid td:first-child {
   border-right-width: 0;
+  padding-right: 1px;
 }
 .app2-table td.mark {
   background: radial-gradient(black 50%, transparent 0) center no-repeat;
@@ -174,6 +175,7 @@ input.error {
   td b {
     color: white;
     background-color: black;
+    border-color: white;
   }
   td b span,
   td i span {
@@ -216,20 +218,20 @@ input.error {
   td.bar-6:after { height: 14rem; }
   td.bar-7:after { height: 16rem; }
   td.bar-8:after { height: 18rem; }
-  #app2_savedContainer td[class^=bar]:after {
-    top: calc(-0.5rem - 1px);
-    left: calc(50% - 0.5rem - 1px);
-    width: 1.125rem;
-  }
-  #app2_savedContainer td.bar-1:after { height: 2.5rem }
-  #app2_savedContainer td.bar-2:after { height: 3.75rem }
-  #app2_savedContainer td.bar-3:after { height: 5rem }
-  #app2_savedContainer td.bar-4:after { height: 6.25rem }
-  #app2_savedContainer td.bar-5:after { height: 7.5rem }
-  #app2_savedContainer td.bar-6:after { height: 8.75rem }
-  #app2_savedContainer td.bar-7:after { height: 10rem; }
-  #app2_savedContainer td.bar-8:after { height: 11.25rem; }
 }
+#app2_savedContainer td[class^=bar]:after {
+  top: calc(-0.5rem - 1px);
+  left: calc(50% - 0.5rem - 1px);
+  width: 1.125rem;
+}
+#app2_savedContainer td.bar-1:after { height: 2.5rem }
+#app2_savedContainer td.bar-2:after { height: 3.75rem }
+#app2_savedContainer td.bar-3:after { height: 5rem }
+#app2_savedContainer td.bar-4:after { height: 6.25rem }
+#app2_savedContainer td.bar-5:after { height: 7.5rem }
+#app2_savedContainer td.bar-6:after { height: 8.75rem }
+#app2_savedContainer td.bar-7:after { height: 10rem; }
+#app2_savedContainer td.bar-8:after { height: 11.25rem; }
   
 span.sharp {
   display: inline-block;
@@ -421,11 +423,19 @@ span.add {
   }
 }
 @media print {
+  .tabs,
   .header-container,
   .grid-container,
   #app2_typeContainer,
   .icon-print {
     display: none !important;
+  }
+
+  td {
+    b, &:after {
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+    }
   }
   
   body, main {
