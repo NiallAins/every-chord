@@ -30,28 +30,34 @@ const app1 = (function() {
             '7': '7th'
         },
         CHORD_NAMES_FULL = [
-            ['♭', 'flat'],
-            ['♭♭', 'double flat'],
-            ['#', 'sharp'],
-            ['##', 'double sharp'],
-            ['o', 'diminished'],
-            ['ø', 'half-diminished'],
-            ['Δ7', 'major 7'],
-            ['Δ9', 'major 9'],
-            ['+7', 'augmented 7'],
-            ['+9', 'augmented 9'],
-            ['+', 'augmented'],
-            ['7', 'minor 7'],
-            ['9', 'minor 9'],
+            ['o', ' diminished ', 'dim'],
+            ['ø', ' half-diminished ', 'm7b5'],
+            ['Δ7', ' maj7'],
+            ['Δ9', ' maj9'],
+            ['+7', ' augmented 7 ', 'aug7'],
+            ['+9', ' augmented 9 ', 'aug9'],
+            ['+', ' augmented ', 'aug'],
+            ['♭9', ' ♭n', '♭n'],
+            ['♭7', ' ♭s', '♭s'],
+            ['#9', ' #n', '#n'],
+            ['#7', ' #s', '#s'],
+            ['7', ' min7', 'm7'],
+            ['9', ' min9', 'm9'],
+            ['♭n', ' ♭9', '♭9'],
+            ['♭s', ' ♭7', '♭7'],
+            ['#n', ' #9', '#9'],
+            ['#s', ' #7', '#7'],
+            ['alt', ' maj7 ♭9', 'M7♭9']
+            
         ],
         CHORD_NUMS = [
             'i', 'ii', 'iii',
             'iv', 'v', 'vi', 'vii'
         ],
         CHORD_NAMES = [
-            ['6',     'o', '', 'diminished'],
-            ['8',     '', '+', 'augmented'],
-            ['69',    'o7'],
+            ['6', 'o', '', 'diminished'],
+            ['8', '', '+', 'augmented'],
+            ['69', 'o7'],
             ['610', 'ø'],
             ['710', '7'],
             ['711', 'Δ7'],
@@ -459,35 +465,40 @@ const app1 = (function() {
             );
         }
         if (currentChord !== -1) {
+            let chordLong = currentChords[currentChord].fullLabel.replace(/<.*?>/g, '');
+            CHORD_NAMES_FULL.forEach(sym => chordLong = chordLong.replace(sym[0], sym[1]));
+            let chordShort = chordLong;
+            CHORD_NAMES_FULL
+                .filter(sym => sym[2])
+                .forEach(sym => chordShort = chordShort.replace(sym[1], sym[2]));
+            chordShort = chordShort.replace(/ /g, '');
+            chordShort = chordShort.replace(/mm/g, 'm');
+
             desc.push(
                 '<span class="music-note">' +
                     currentChords[currentChord].label + 
                 '</span> chord'
             );
-            desc.push(
-                '<span class="music-note">' +
-                    currentChords[currentChord].fullLabel +
-                '</span>'
-            );
+            desc.push(`
+                <span class="music-note">
+                    ${chordLong}
+                </span>
+                <button
+                    class="notes-goto"
+                    onclick="document.body.classList.remove('tab-one')"
+                >
+                    Find voicings
+                </button>
+            `);
+
+            app2_inputChord.value = chordShort; 
+            app2.update();
         }
         app1_chords.innerHTML += `
             <div class="notes">
-                ${desc.reduce((htm, d) => htm + `
-                    <span>
-                        ${d}
-                    </span>
-                `, '')}
+                ${desc.reduce((htm, d, di, dArr) => htm +`<span> ${d} </span>`, '')}
             </div>
         `;
-        if (currentChord !== -1) {
-            console.log(currentChords[currentChord]);
-            app2_inputChord.value = currentChords[currentChord]
-                .fullLabel
-                .replace('<sup>o</sup>', ' dim')
-                .replace('+', ' aug')
-                .replace(/<.*?>/g, '');
-            app2.update();
-        }
     }
 
     const

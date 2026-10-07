@@ -202,6 +202,7 @@ span.add {
 }
 
 .notes {
+  position: relative;
   margin-top: 0.5rem;
   margin-left: 0.5rem;
   display: flex;
@@ -215,12 +216,31 @@ span.add {
 .notes > span {
   font-style: italic;
   height: 1.25rem;
-  padding-right: 1rem;
+  padding-right: 0.5rem;
   white-space: nowrap;
   line-height: 1rem;
+
+  &:last-child {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
 }
 .notes sup {
   vertical-align: 3px;
+}
+.notes-goto {
+  width: auto !important;
+  height: auto;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  text-underline-offset: 2px;
+
+  &:focus,
+  &:hover {
+    box-shadow: none;
+  }
 }
 
 @media (max-width: 720px) {
