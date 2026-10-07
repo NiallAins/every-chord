@@ -87,11 +87,19 @@ h1 {
   .grid-container {
     grid-template-columns: auto auto;
   }
+  main {
+    padding-bottom: 3rem;
+  }
   .input-container,
   #app1_inputContainer,
   .tuning-container {
     grid-column-start: 1;
     grid-column-end: 3;
+  }
+  .header-container span {
+    top: 0;
+    line-height: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
