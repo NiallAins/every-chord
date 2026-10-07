@@ -70,6 +70,7 @@ h1 {
 
 .grid-container {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: start;
   width: max-content;
   max-width: 100%;
@@ -81,6 +82,17 @@ h1 {
 .grid-container > :nth-child(2),
 .grid-container > :last-child {
   margin-left: auto;
+}
+@media (max-width: 642px) {
+  .grid-container {
+    grid-template-columns: auto auto;
+  }
+  .input-container,
+  #app1_inputContainer,
+  .tuning-container {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
 }
 
 @import 'app-1';

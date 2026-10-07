@@ -74,6 +74,7 @@ h1 {
 
 .grid-container {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: start;
   width: -moz-max-content;
   width: max-content;
@@ -90,10 +91,22 @@ h1 {
   margin-left: auto;
 }
 
+@media (max-width: 642px) {
+  .grid-container {
+    grid-template-columns: auto auto;
+  }
+  .input-container,
+  #app1_inputContainer,
+  .tuning-container {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+}
 .fret-buttons {
   white-space: nowrap;
   grid-column: 2;
   justify-self: end;
+  padding-left: 0.5rem;
 }
 
 #app1_inputContainer {
@@ -366,7 +379,7 @@ span.add {
   #app1_inputChord,
   .tuning-container {
     grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column-end: 1;
   }
   .tuning-container {
     justify-self: start;
@@ -376,6 +389,20 @@ span.add {
   #app1_inputContainer {
     min-width: unset;
     width: 100%;
+  }
+}
+@media (max-width: 540px) {
+  #app1_chords > div {
+    width: auto !important;
+  }
+  .chord-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.125rem 0.25rem;
+    padding-bottom: 1rem;
+  }
+  .chord-container > :last-child {
+    grid-column: 3;
   }
 }
 @media print {

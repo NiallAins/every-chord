@@ -404,7 +404,7 @@ const app1 = (function() {
             }, '');
         
         app1_chords.innerHTML = `
-            <div>${
+            <div class="chord-container">${
                 currentChords.reduce((htm, c, i) => htm + `
                     <button
                         class="
