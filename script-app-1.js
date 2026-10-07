@@ -145,12 +145,12 @@ const app1 = (function() {
         MIN_FRETS = 6,
         DEFAULT_FRETS = 8,
         NOTE_FREQS = [
-            185.00, 196.00,    207.65,
-            220.00,    233.08,    246.94,    261.63,    277.18,    293.66,
-            311.13,    329.63,    349.23,    369.99,    392.00,    415.30,
-            440.00,    466.16,    493.88,    523.25,    554.37,    587.33,
-            622.25,    659.25,    698.46,    739.99,    783.99,    830.61,
-            880.00,    932.33,    987.77, 1046.50, 1108.73, 1174.66,
+            185.00,   196.00,  207.65,
+            220.00,   233.08,  246.94,  261.63,  277.18,  293.66,
+            311.13,   329.63,  349.23,  369.99,  392.00,  415.30,
+            440.00,   466.16,  493.88,  523.25,  554.37,  587.33,
+            622.25,   659.25,  698.46,  739.99,  783.99,  830.61,
+            880.00,   932.33,  987.77, 1046.50, 1108.73, 1174.66,
             1244.51, 1318.51, 1396.91, 1479.98, 1567.98, 1661.22
         ],
         FREQ_INIT = 3;
@@ -188,7 +188,8 @@ const app1 = (function() {
     function setStringValues(value) {
         stringValues = value
             .match(/[a-gA-G][#b]?/g)
-            .map(n => getNoteValue(n.toLowerCase()));
+            .map(n => getNoteValue(n.toLowerCase()))
+            .reverse();
     }
 
     function getNotes() {
@@ -512,32 +513,26 @@ const app1 = (function() {
 
     function play(onlyChord) {
         if (currentChord === -1) {
-            if (onlyChord) {
-                return;    
+            if (!onlyChord) {
+                const INTERVALS = SCALES[currentScale].intervals;
+
+                let notes = [currentKey + currentAcc];
+                for (let i = 0; i < INTERVALS.length; i++) {
+                    notes.push(
+                        notes[notes.length - 1] +
+                        INTERVALS[(i + currentMode) % INTERVALS.length]
+                    );
+                }
+
+                Tone.finish();
+
+                notes.forEach((n, i) => noteTimeouts.push(
+                    setTimeout(() =>
+                        Tone.play(NOTE_FREQS[FREQ_INIT + n]),
+                        150 * i
+                    )
+                ));
             }
-            
-            const
-                INTERVALS = SCALES[currentScale].intervals,
-                VOLUMNE = 0.5,
-                SUSTAIN = 200;
-
-            let notes = [currentKey + currentAcc];
-            for (let i = 0; i < INTERVALS.length; i++) {
-                notes.push(
-                    notes[notes.length - 1] +
-                    INTERVALS[(i + currentMode) % INTERVALS.length]
-                );
-            }
-
-            stopNote();
-            GAIN.gain.value = VOLUMNE;
-
-            notes.forEach((n, i) => noteTimeouts.push(
-                setTimeout(() =>
-                    playNote(NOTE_FREQS[FREQ_INIT + n], SUSTAIN),
-                    SUSTAIN * i
-                )
-            ));
         } else {
             let notes = currentChords[currentChord].notes.map(n => n);
             for (let i = 0; i < notes.length; i++) {
@@ -549,51 +544,11 @@ const app1 = (function() {
                 notes.push(currentChords[currentChord].notes[0] + 12);
             }
 
-            const
-                VOLUMNE = 1 / notes.length,
-                INTERVAL = 150,
-                SUSTAIN = 1300,
-                FADE = 700;
-
-            stopNote();
-            GAIN.gain.value = VOLUMNE;
-
+            Tone.finish();
             notes.forEach((n, i) => noteTimeouts.push(setTimeout(() =>
-                playNote(
-                    NOTE_FREQS[FREQ_INIT + n],
-                    SUSTAIN + (INTERVAL * (notes.length - i))
-                ),
-                INTERVAL * i
+                Tone.play(NOTE_FREQS[FREQ_INIT + n]),
+                150 * i
             )));
-            for (let i = 0; i < FADE; i++) {
-                noteTimeouts.push(setTimeout(
-                    () => GAIN.gain.value = VOLUMNE * (i / FADE),
-                    (INTERVAL * notes.length) + SUSTAIN - i
-                ));
-            }
-        }
-    }
-
-    function playNote(freq, duration) {
-        const OSC = AUDCTX.createOscillator();
-        OSC.connect(GAIN);
-        OSC.type = 'triangle';
-        OSC.frequency.value = freq;
-        OSC.start();
-        noteBuffer.push(OSC);
-        
-        setTimeout(() => stopNote(OSC), duration);
-    }
-
-    function stopNote(note) {
-        if (note) {
-            note.stop();
-            noteBuffer.splice(noteBuffer.indexOf(note), 1);
-        } else {
-            noteTimeouts.forEach(t => clearTimeout(t));
-            noteTimeouts = [];
-            noteBuffer.forEach(n => n.stop());
-            noteBuffer = [];
         }
     }
 

@@ -53,20 +53,20 @@
                 <input
                     id="inputTuning"
                     type="text"
-                    value="EBGDAE"
+                    value="EADGBE"
                     placeholder="Tuning"
                     oninput="updateTuning()"
                     autocomplete="off"
                     spellcheck="false"
                 />
                 <button onclick="
-                    inputTuning.value = 'EBGDAE';
+                    inputTuning.value = 'EADGBE';
                     updateTuning();
                 ">
                     Guitar
                 </button>
                 <button onclick="
-                    inputTuning.value = 'GDAE';
+                    inputTuning.value = 'EADG';
                     updateTuning();
                 ">
                     Bass
@@ -90,7 +90,7 @@
                     Cello
                 </button>
                 <button onclick="
-                    inputTuning.value = 'GDGBD';
+                    inputTuning.value = 'DGBD';
                     updateTuning();
                 ">
                     Banjo
@@ -198,6 +198,7 @@
         </div>
     </main>
 
+    <script src="tiny-tone.js"></script>
     <script src="script-app-1.js"></script>
     <script src="script-app-2.js"></script>
     <script src="script-common.js"></script>

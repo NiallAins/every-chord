@@ -249,7 +249,8 @@ const app2 = (function() {
     function setStringValues(value) {
         stringValues = value
             .match(/[a-gA-G][#b]?/g)
-            .map(n => getNoteValue(n.toLowerCase()));
+            .map(n => getNoteValue(n.toLowerCase()))
+            .reverse();
     }
 
     function setStringFreqs() {
@@ -662,56 +663,16 @@ const app2 = (function() {
     GAIN.connect(AUDCTX.destination);
 
     function strum() {
-        if (!currentVoices.length) {
-            return;
-        }
-        
-        const
-            VOICE = currentVoices[currentVoiceNum].frets,
-            NOTES = VOICE
+        if (currentVoices.length) {
+            currentVoices[currentVoiceNum]
+                .frets
                 .map((f, s) => f === -1 ? 0 : NOTE_FREQS[stringFreqs[s] + f])
                 .filter(s => s)
-                .reverse(),
-            VOLUMNE = 1 / NOTES.length,
-            INTERVAL = 150,
-            SUSTAIN = 1300,
-            FADE = 700;
-        
-        stopNote();
-        GAIN.gain.value = VOLUMNE;
-        
-        NOTES.forEach((freq, i) => noteTimeouts.push(setTimeout(() =>
-            playNote(freq, SUSTAIN + (INTERVAL * (NOTES.length - i))),
-            INTERVAL * i
-        )));
-        for (let i = 0; i < FADE; i++) {
-            noteTimeouts.push(setTimeout(
-                () => GAIN.gain.value = VOLUMNE * (i / FADE),
-                (INTERVAL * NOTES.length) + SUSTAIN - i
-            ));
-        }
-    }
-
-    function playNote(freq, duration) {
-        const OSC = AUDCTX.createOscillator();
-        OSC.connect(GAIN);
-        OSC.type = 'triangle';
-        OSC.frequency.value = freq;
-        OSC.start();
-        noteBuffer.push(OSC);
-        
-        setTimeout(() => stopNote(OSC), duration);
-    }
-
-    function stopNote(note) {
-        if (note) {
-            note.stop();
-            noteBuffer.splice(noteBuffer.indexOf(note), 1);
-        } else {
-            noteTimeouts.forEach(t => clearTimeout(t));
-            noteTimeouts = [];
-            noteBuffer.forEach(n => n.stop());
-            noteBuffer = [];
+                .reverse()
+                .forEach((freq, i) => noteTimeouts.push(setTimeout(() =>
+                    Tone.play(freq),
+                    180 * i
+                )));
         }
     }
 
