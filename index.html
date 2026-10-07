@@ -1,0 +1,207 @@
+<html>
+
+<head>
+        <title>
+                Every Chord
+        </title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+    <main>
+        <div class="header-container">
+            <h1>Chords</h1>
+            <span>
+                for any <i>scale</i><br/>
+                in&nbsp; any <i>tuning</i><br/>
+                for any <i>strings</i>
+            </span>
+        </div>
+
+        <div class="tabs">
+            <button class="tab" onclick="document.body.classList.remove('tab-one')"> Vocings </button>
+            <button class="tab" onclick="document.body.classList.add('tab-one')"> Explore scales </button>
+        </div>
+
+        <div class="grid-container">
+            <div class="app-1 app-1__head">
+                <div id="app1_inputContainer"></div>
+            </div>
+            
+            <div class="app-2 app-2__head">
+                <div class="input-container">
+                    <input
+                        id="app2_inputChord"
+                        type="text"
+                        value="A Maj"
+                        oninput="app2.update()"
+                        autocomplete="off"
+                        spellcheck="false"
+                        placeholder="Chord"
+                        onkeydown="event.key === 'Enter' ? app2.strum() : ''"
+                    />
+                    <button
+                        class="icon-play"
+                        onclick="app2.strum()"
+                    ></button>
+                </div>
+            </div>
+                    
+            <div class="tuning-container">
+                <input
+                    id="inputTuning"
+                    type="text"
+                    value="EBGDAE"
+                    placeholder="Tuning"
+                    oninput="updateTuning()"
+                    autocomplete="off"
+                    spellcheck="false"
+                />
+                <button onclick="
+                    inputTuning.value = 'EBGDAE';
+                    updateTuning();
+                ">
+                    Guitar
+                </button>
+                <button onclick="
+                    inputTuning.value = 'GDAE';
+                    updateTuning();
+                ">
+                    Bass
+                </button>
+                <button onclick="
+                    inputTuning.value = 'GCEA';
+                    updateTuning();
+                ">
+                    Ukulele
+                </button>
+                <button onclick="
+                    inputTuning.value = 'GDAE';
+                    updateTuning();
+                ">
+                    Violin
+                </button>
+                <button onclick="
+                    inputTuning.value = 'CGDA';
+                    updateTuning();
+                ">
+                    Cello
+                </button>
+                <button onclick="
+                    inputTuning.value = 'GDGBD';
+                    updateTuning();
+                ">
+                    Banjo
+                </button>
+            </div>
+
+            <div class="app-1 app-1__body">
+                <table class="app1-table">
+                    <tbody id="app1_figure">
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td class="mark"></td>
+                            <td></td><td class="mark"></td><td></td><td class="mark"></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div id="app1_chords"></div>
+
+                <div class="fret-buttons">
+                    <button onclick="removeFret()">
+                        -
+                    </button>
+                    <button onclick="addFret()">
+                        +
+                    </button>
+                </div>    
+            </div>
+
+            <div class="app-2 app-2__body">
+                <table class="app2-table">
+                    <tbody id="app2_figure">
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td class="mark"></td>
+                            <td></td><td class="mark"></td><td></td><td class="mark"></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <tr>
+                            <td></td><td></td><td></td><td></td>
+                            <td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div id="app2_voiceContainer"></div>
+
+                <div class="fret-buttons">
+                    <button
+                        class="icon-save"
+                        onclick="app2.addToSaved()"
+                    >
+                        &nbsp;
+                    </button>
+                    <button onclick="removeFret()">
+                        -
+                    </button>
+                    <button onclick="addFret()">
+                        +
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-2 app-2__footer">
+            <div id="app2_typeContainer"></div>
+            <div id="app2_savedContainer"></div>
+            <button
+                onclick="print()"
+                class="icon-print"
+            ></button>
+        </div>
+    </main>
+
+    <script src="script-app-1.js"></script>
+    <script src="script-app-2.js"></script>
+    <script src="script-common.js"></script>
+    
+</body>
+
+</html>

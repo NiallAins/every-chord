@@ -1,0 +1,256 @@
+.fret-buttons {
+  white-space: nowrap;
+  grid-column: 2;
+  justify-self: end;
+}
+#app1_inputContainer {
+  min-width: 364px;
+  padding-right: 0.5rem;
+  white-space: nowrap;
+}
+#app1_inputContainer > div {
+  display: flex;
+  max-width: 15rem;
+}
+#app1_chords > div {
+  display: flex;
+  width: 22.25rem;
+}
+#app1_inputContainer > div > button,
+#app1_chords > div > button {
+  width: 100%;
+}
+
+.tuning-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.25rem;
+  width: max-content;
+  justify-self: end;
+}
+.tuning-container :first-child {
+  grid-column-start: 1;
+  grid-column-end: 4;
+}
+
+.music-note {
+  font-family: 'Noto Music';
+  line-height: 1;
+}
+#app1_chords :first-child sup {
+  padding-left: 0.125rem;
+}
+
+input {
+  padding: 0.25rem 0.75rem;
+  font-size: 2rem;
+  width: 10rem;
+  border: 1px solid black;
+  font-weight: 300;
+  font-family: Helvetica;
+}
+#inputTuning {
+  padding: 0.125rem 0.75rem;
+  font-size: 1.125rem;
+}
+button {
+  width: 1.875rem;
+  height: 1.875rem;
+  border: 1px solid black;
+  border-radius: 2px;
+  margin-left: 0.25rem;
+  margin-bottom: 0.25rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 300;
+  font-family: Helvetica;
+  background: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.fret-buttons button {
+  font-size: 1.25rem;
+}
+.tuning-container button {
+  width: auto;
+  height: 1.25rem;
+  margin: 0;
+}
+button.active {
+  color: white;
+  font-weight: 400;
+  background-color: black;
+}
+input:hover,
+button:hover,
+input:focus,
+button:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px black;
+}
+input.error {
+  border-color: red;
+  box-shadow: inset 0 0 0 1px darkred;
+}
+
+.app1-table {
+  margin: 2.5rem 0 0.5rem -2rem;
+  user-select: none;
+  border-collapse: collapse;
+}
+.app1-table.mid td:first-child {
+  border-right-width: 0;
+}
+.app1-table td.mark {
+  background:
+    radial-gradient(black 50%, transparent 0)
+    center no-repeat;
+  background-size: 1.625rem 1.625rem;
+}
+#app1_savedContainer .app1-table td.mark {
+  background-size: 0.875rem 0.875rem;
+  visibility: viible !important;
+}
+.app1-table {
+  td {
+    position: relative;
+    width: 4rem;
+    height: calc(2rem - 1px);
+    padding: 0;
+    border: 1px solid black;
+  }
+  td:first-child {
+    border-width: 0 4px 0 0;
+    width: 2.25rem;
+  }
+  tr:last-child td {
+    border-color: transparent;
+  }
+
+  td i,
+  td b,
+  td strong,
+  td em {
+    position: absolute;
+    top: -1rem;
+    left: calc(50% - 1rem);
+    z-index: 1;
+    width: 2rem;
+    line-height: 2rem;
+    border-radius: 100%;
+    text-align: center;
+    font-style: normal;
+    box-shadow: inset 0 0 0 1px black;
+    background-color: white;
+  }
+  td:hover i,
+  td:hover b {
+    z-index: 10;
+  }
+
+  td strong,
+  td em {
+    font-weight: normal;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    padding-bottom: 0.25rem;
+  }
+  td em {
+    box-shadow: none;
+    background: none;
+  }
+  td b {
+    color: white;
+    background-color: black;
+  }
+  td b span,
+  td i span {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: inherit;
+    border: 1px solid black;
+    padding: 0 0.375rem;
+    line-height: 1.875rem;
+    border-radius: 1rem;
+    white-space: nowrap;
+  }
+  td:hover b span,
+  td:hover i span {
+    display: block;
+  }
+  td .num {
+    display: inline-block;
+    transform: rotate(-90deg) translateY(6px);
+  }
+}
+
+span.sharp {
+  display: inline-block;
+  padding: 0 2px 0 3px;
+  transform: scale(1.75, 1) translateY(-3px);
+}
+span.flat {
+  display: inline-block;
+  padding: 0 1px 0 2px;
+  transform: scale(1.5, 1.25) translateY(-1px);
+}
+span.add {
+  font-size: 0.75em;
+}
+
+.notes {
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width: fit-content;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 200;
+}
+.notes > span {
+  font-style: italic;
+  height: 1.25rem;
+  padding-right: 1rem;
+  white-space: nowrap;
+  line-height: 1rem;
+}
+.notes sup {
+  vertical-align: 3px;
+}
+
+@media (max-width: 720px) {
+  body {
+    margin: 2rem 1.5rem 2rem 2.5rem;
+  }
+}
+@media (max-width: 642px) {
+  #app1_inputChord,
+  .tuning-container {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+  .tuning-container {
+    justify-self: start;
+    margin-top: 1rem;
+    margin-left: 0 !important;
+  }
+  #app1_inputContainer {
+    min-width: unset;
+    width: 100%;
+  }
+}
+@media print {
+  body, main {
+    width: calc(100vw - 4rem);  
+  }
+  
+  .header-container,
+  .grid-container {
+    display: none !important;
+  }
+}

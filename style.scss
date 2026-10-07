@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Music&family=Open+Sans:wght@300;400;700&display=swap');
+
+.app-1,
+.app-2 {
+    display: contents;
+}
+
+body:not(.tab-one) .app-1,
+body.tab-one .app-2 {
+    display: none;
+}
+
+.tabs {
+    padding-left: 0.5rem;
+    border-bottom: 1px solid black;
+    margin-bottom: 1rem;
+}
+.tab {
+    width: 6rem;
+    margin: 0 0 -1px 0;
+}
+
+body:not(.tab-one) .tab:first-child,
+body.tab-one .tab:last-child {
+    border-bottom-color: white;
+    pointer-events: none;
+}
+
+body:not(.tab-one) .tab:first-child:hover,
+body.tab-one .tab:last-child:hover,
+body:not(.tab-one) .tab:first-child:focus,
+body.tab-one .tab:last-child:focus {
+    box-shadow: none;
+}
+
+body {
+  font-family: Helvetica, 'Noto Music';
+  font-size: 14px;
+  margin: calc(2rem + 5vh) 4rem;
+  font-weight: 300;
+}
+
+main {
+  width: min-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.header-container {
+  display: flex;
+  align-items: start;
+}
+h1 {
+  font-size: 2.25rem;
+  font-weight: 200;
+  margin: 0 0.5rem 0 0;
+}
+.header-container span {
+  line-height: 1.25rem;
+  font-weight: normal;
+  font-size: 0.875rem;
+  margin-left: auto;
+  position: relative;
+  top: 0.5rem;
+}
+.header-container i {
+  font-family: "Times New Roman";
+  font-size: 1rem;
+}
+
+.grid-container {
+  display: grid;
+  align-items: start;
+  width: max-content;
+  max-width: 100%;
+}
+.grid-container table {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.grid-container > :nth-child(2),
+.grid-container > :last-child {
+  margin-left: auto;
+}
+
+@import 'app-1';
+@import 'app-2';
