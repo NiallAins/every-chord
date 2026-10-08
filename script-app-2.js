@@ -88,11 +88,12 @@ const app2 = (function() {
     function getChordFromInput(value) {
         // Clean input
         value = value
-            .replace(/^([a-z]) ([b#][0-9])/i, '$1M$2')
+            .replace(/^([a-z]) ([b#]+[0-9])/i, '$1M$2')
             .replace(/ /g, '')
             .replace(/add/ig, '&')
-            .replace(/m?(fulldiminished|fulldim|full-dim)/ig, 'mb5M6')
-            .replace(/m?(ø|halfdiminished|halfdim|half-dim)/ig, 'mb5m7')
+            .replace(/m?(fully?[ -]*dim(inished)?)/ig, 'mb5bb7')
+            .replace(/m?(o|°|diminished|dim)7/ig, 'mb5bb7')
+            .replace(/m?(ø|half[ -]*dim(inished)?)/ig, 'mb5m7')
             .replace(/m?(o|°|diminished|dim)/ig, 'mb5')
             .replace(/altered|alt/i,'M7#5')
             .replace(/\+|aug|augmented/ig, '#5')
@@ -104,6 +105,8 @@ const app2 = (function() {
             .replace(/flat|♭/ig, 'b')
             .replace(/\\/ig, '\/')
             .toLowerCase();
+
+        console.log(value);
         
         // Error
         if (!value.match(/^[a-g][0-9nmb#s]*(&[0-9nmb#]*)?(\/[a-g][#b]?)?$/)) {
@@ -155,7 +158,7 @@ const app2 = (function() {
         
         // Extensions
         const EX = 
-            (value.match(/&?(n|m)?(b|#)?(1[0-9]|[1-9])/g) || [])
+            (value.match(/&?(n|m)?(b|#){0,2}(1[0-9]|[1-9])/g) || [])
             .map(e => {
                 value = value.replace(e, '')
                 return {
@@ -164,35 +167,34 @@ const app2 = (function() {
                 }
             });
         // Add implied extensions
-        if (EX[0] && EX[0].note > 7 && EX[0].note % 2 && EX[0].acc[0] !== '&') {
+        if (
+            EX[0] &&
+            EX[0].note > 7 &&
+            EX[0].note % 2 &&
+            EX[0].acc[0] !== '&' &&
+            EX[0].acc[0] !== '#' &&
+            EX[0].acc[0] !== 'b'
+        ) {
             for (let i = EX[0].note - 2; i >= 7; i -= 2) {
                 if (!EX.find(e => e.note === i)) {
                     EX.push({
                         note: i,
-                        acc: (i === 7 && EX[0].acc.match(/n/) ? 'n' : '')
+                        acc: i === 7 ? EX[0].acc[0] : ''
                     });
                 }
             }
+            EX[0].acc = '';
         }
         EX.forEach(e => {
             let
                 label = '',
                 interval = [0, 2, 4, 5, 7, 9, 11][(e.note - 1) % 7];
-            if (e.note === 7) {
-                if (!e.acc.match(/n/)) {
-                    interval -= 1;
-                    label = 'm';
-                } else {
-                    label = 'M';
-                }
-            } else {
-                if (e.acc.match(/[bm]/)) {
-                    interval -= 1;
-                    label = [2, 3, 6].includes(e.note) ? 'm' : '<span class="flat">♭</span>';
-                } else if (e.acc.match(/#/)) {
-                    interval += 1;
-                    label = '<span class="sharp">♯</span>';
-                }
+            if (e.acc) {
+                interval += e.acc.split('').reduce((a, x) => a + (x === 'm' ? -1 : x === '#' ? 1 : x === 'b' ? -1 : 0), 0);
+                label = e.acc
+                    .replace(/n/g, 'M')
+                    .replace(/b/g, '<span class="flat">♭</span>')
+                    .replace(/b/g, '<span class="sharp">#</span>');
             }
             
             chord.push({
@@ -545,7 +547,7 @@ const app2 = (function() {
         app2_typeContainer.innerHTML = type.reduce((html, t) => html + `<span>${t}</span>`, '');
     }
 
-    function addToSaved(chord, label) {
+    function addToSaved() {
         savedVoices.push({
             label: formatLabel(app2_inputChord.value),
             frets: currentVoices[currentVoiceNum].frets
@@ -628,10 +630,11 @@ const app2 = (function() {
             label.substring(1)
                 .replace(/ /g, '')
                 .replace(/&|(add)/ig, 'add')
-                .replace(/dim|°/ig, 'o')
-                .replace(/\aug/ig, '+')
-                .replace(/minor|min/ig, 'm')
-                .replace(/min|\-/ig, 'm')
+                .replace(/half[ -]*dim(inished)?/, 'ø')
+                .replace(/fully?[ -]*dim(inished)?/, 'o7')
+                .replace(/dim(inished)?|°/ig, 'o')
+                .replace(/aug(mented)?/ig, '+')
+                .replace(/minor|min|-/ig, 'm')
                 .replace(/major|maj|Δ|\^/ig, 'M')
                 .replace(/sharp|#/ig, '♯')
                 .replace(/flat|b/ig, '♭')

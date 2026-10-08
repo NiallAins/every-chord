@@ -31,20 +31,23 @@ const app1 = (function() {
             '9': '9th'
         },
         CHORD_NAMES_FULL = [
-            ['o', ' diminished ', 'dim'],
-            ['ø', ' half-diminished ', 'm7b5'],
+            ['o♭9', ' full-diminished ♭9', ' dim b9'],
+            ['o#9', ' full-diminished #9', ' dim #9'],
+            ['o7', ' full-diminished ', ' dim7'],
+            ['ø', ' half-diminished ', '  half-dim'],
+            ['o', ' diminished ', ' dim'],
             ['Δ7', ' maj7'],
             ['Δ9', ' maj9'],
-            ['+7', ' augmented 7 ', 'aug7'],
-            ['+9', ' augmented 9 ', 'aug9'],
-            ['+', ' augmented ', 'aug'],
-            ['♭9', ' ♭9', 'b9'],
-            ['♭7', ' ♭7', 'b7'],
-            ['#9', ' #9', '#9'],
-            ['#7', ' #7', '#7'],
+            ['+7', ' augmented 7 ', ' aug7'],
+            ['+9', ' augmented 9 ', ' aug9'],
+            ['+', ' augmented ', ' aug'],
+            ['♭9', ' ♭9', ' b9'],
+            ['♭7', ' ♭7', ' b7'],
+            ['#9', ' #9', ' #9'],
+            ['#7', ' #7', ' #7'],
             ['m dim', ' dim'],
             ['m hal', ' hal'],
-            ['alt', ' maj9 #5', 'M9#5']
+            ['alt', ' maj9 #5', ' M9#5']
             
         ],
         CHORD_NUMS = [
@@ -484,11 +487,11 @@ const app1 = (function() {
                 .filter(sym => sym[2])
                 .forEach(sym => chordShort = chordShort.replace(sym[1], sym[2]));
             chordShort = chordShort
-                .replace(/ /g, '')
                 .replace(/maj/g, 'M')
                 .replace(/min/g, 'm')
-                .replace(/mm/g, 'm')
-                .replace(/MM/g, 'M');
+                .replace(/m ?m/g, 'm')
+                .replace(/M ?M/g, 'M')
+                .replace(/ +/g, ' ');
 
             desc.push(
                 '<span class="music-note">' +
@@ -514,7 +517,7 @@ const app1 = (function() {
         }
         app1_chords.innerHTML += `
             <div class="notes">
-                ${desc.reduce((htm, d, di, dArr) => htm +`<span> ${d} </span>`, '')}
+                ${desc.reduce((htm, d) => htm +`<span> ${d} </span>`, '')}
             </div>
         `;
     }

@@ -48,7 +48,8 @@
 
 input {
   padding: 0.25rem 0.75rem;
-  font-size: 2rem;
+  font-size: 1.75rem;
+  line-height: 2.5rem;
   width: 10rem;
   border: 1px solid black;
   font-weight: 300;
@@ -226,13 +227,13 @@ span.add {
 .notes > span {
   font-style: italic;
   height: 1.25rem;
-  padding-right: 0.5rem;
+  padding-right: 0.75rem;
   white-space: nowrap;
   line-height: 1rem;
 
   &:last-child {
     display: flex;
-    gap: 0.5rem;
+    gap: 1.5rem;
     justify-content: space-between;
   }
 }
