@@ -308,9 +308,15 @@ const app1 = (function() {
     function drawFigure() {
         const MID_STRING = Math.floor(stringValues.length / 2) - 1;
         app1_inputContainer.innerHTML = `
+            <div>
+                <label for="scaleOne">
+                    Select scale
+                </label>
+            </div>
             <div>${
                     Object.keys(NOTE_VALUES).reduce((htm, n) => htm + `
                         <button
+                            ${ n === 0 ? `id="scaleOne"` : '' }
                             ${currentKey === NOTE_VALUES[n] ? 'class="active"' : ''}
                             onclick="
                                 app1.setCurrentKey(${NOTE_VALUES[n]});
@@ -323,7 +329,7 @@ const app1 = (function() {
                     `, '')
             }</div>
             <div>${
-                    ['♭', '♮', '#'].reduce((htm, n, i) => htm + `
+                    ['<span class="flat">♭</span>', '<span class="flat">♮</span>', '#'].reduce((htm, n, i) => htm + `
                         <button
                             ${currentAcc === i - 1 ? 'class="active"' : ''}
                             onclick="
@@ -396,7 +402,7 @@ const app1 = (function() {
                                 ? 'b' : 'i';
                         sHtml += `<${EL}${IS_NINTH ? ' class="ninth"' : ''}>
                             ${LABEL}
-                            <span>${getFullIntervalName(LABEL)}</span>
+                            <span class="full">${getFullIntervalName(LABEL)}</span>
                         </${EL}>`;
                     }
                     sHtml += '</td>';
@@ -405,9 +411,15 @@ const app1 = (function() {
             }, '');
         
         app1_chords.innerHTML = `
+            <div>
+                <label for="chordOne">
+                    Select chord
+                </label>
+            </div>
             <div class="chord-container">${
                 currentChords.reduce((htm, c, i) => htm + `
                     <button
+                        id="chordOne"
                         class="
                             music-note
                             ${currentChord === i ? 'active' : ''}
@@ -450,7 +462,7 @@ const app1 = (function() {
         let desc = [];
         desc.push(
             'AABCCDDEFFGG'[currentKey] +
-            ['♭','', '#'][currentAcc + 1] + ' ' +
+            ['<span class="flat">♭</span>','', '#'][currentAcc + 1] + ' ' +
             SCALES[currentScale].modes[currentMode]
         );
         if (currentMode === 0) {
@@ -481,12 +493,12 @@ const app1 = (function() {
 
             desc.push(
                 '<span class="music-note">' +
-                    currentChords[currentChord].label + 
+                    currentChords[currentChord].label.replace('♭', '<span class="flat">♭</span>') + 
                 '</span> chord'
             );
             desc.push(`
                 <span class="music-note">
-                    ${chordLong}
+                    ${chordLong.replace('♭', '<span class="flat">♭</span>')}
                 </span>
                 <button
                     class="notes-goto"

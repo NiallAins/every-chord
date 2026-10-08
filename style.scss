@@ -83,6 +83,11 @@ h1 {
 .grid-container > :last-child {
   margin-left: auto;
 }
+label {
+  display: block;
+  font-style: italic;
+  padding-bottom: 0.375rem;
+}
 @media (max-width: 642px) {
   .grid-container {
     grid-template-columns: auto auto;

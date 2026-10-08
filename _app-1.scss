@@ -28,8 +28,12 @@
   gap: 0.25rem;
   width: max-content;
   justify-self: end;
+
+  label {
+    padding-bottom: 0.125rem;
+  }
 }
-.tuning-container :first-child {
+.tuning-container :nth-child(2) {
   grid-column-start: 1;
   grid-column-end: 4;
 }
@@ -53,6 +57,7 @@ input {
 #inputTuning {
   padding: 0.125rem 0.75rem;
   font-size: 1.125rem;
+  line-height: 1.5rem;
 }
 button {
   width: 1.875rem;
@@ -169,8 +174,8 @@ input.error {
     background-color: black;
     border-color: white;
   }
-  td b span,
-  td i span {
+  td b .full,
+  td i .full {
     display: none;
     position: absolute;
     top: 0;
@@ -183,8 +188,8 @@ input.error {
     border-radius: 1rem;
     white-space: nowrap;
   }
-  td:hover b span,
-  td:hover i span {
+  td:hover b .full,
+  td:hover i .full {
     display: block;
   }
   td .num {
@@ -196,12 +201,11 @@ input.error {
 span.sharp {
   display: inline-block;
   padding: 0 2px 0 3px;
-  transform: scale(1.75, 1) translateY(-3px);
 }
 span.flat {
   display: inline-block;
   padding: 0 1px 0 2px;
-  transform: scale(1.5, 1.25) translateY(-1px);
+  transform: scale(1.75, 1.25) translateY(-1px);
 }
 span.add {
   font-size: 0.75em;
@@ -242,6 +246,7 @@ span.add {
   border: none;
   padding: 0;
   text-underline-offset: 2px;
+  font-size: 0.875rem;
 
   &:focus,
   &:hover {

@@ -92,8 +92,9 @@ const app2 = (function() {
             .replace(/^([a-z]) ([b#][0-9])/i, '$1M$2')
             .replace(/ /g, '')
             .replace(/add/ig, '&')
+            .replace(/m?(fulldiminished|fulldim|full-dim)/ig, 'mb5M6')
+            .replace(/m?(ø|halfdiminished|halfdim|half-dim)/ig, 'mb5m7')
             .replace(/m?(o|°|diminished|dim)/ig, 'mb5')
-            .replace(/m?(ø|halfdiminished|halfdim)/ig, 'mb5m7')
             .replace(/altered|alt/i,'M7#5')
             .replace(/\+|aug|augmented/ig, '#5')
             .replace(/minor|min|\-/ig, 'm')
@@ -215,7 +216,7 @@ const app2 = (function() {
                     value: SLASH_VALUE,
                     label: '/' + slash[0].toUpperCase() + (
                         slash[1] === 'b'
-                            ? '<span class="flat">♭<span>'
+                            ? '<span class="flat">♭</span>'
                             : slash[1] === '#'
                             ? '<span class="sharp">♯</span>'
                             : ''
@@ -439,7 +440,10 @@ const app2 = (function() {
         Object
             .keys(INTERVAL_NAMES_FULL)
             .forEach(i => interval = interval.replace(i, INTERVAL_NAMES_FULL[i]));
-        interval = interval.replace(/[0-9]+/, m => m + (m === '2' ? 'nd' : m === '3' ? 'rd' : 'th'));
+        interval = interval
+            .replace(/[0-9]+/, m => m + (m === '2' ? 'nd' : m === '3' ? 'rd' : 'th'))
+            .replace(/\/([A-Z][b#]?)/, 'over $1');
+
         return interval;
     }
 
@@ -468,7 +472,7 @@ const app2 = (function() {
                     } else if (N) {
                         const CONTENT = `
                             ${N.label}
-                            <span>${getFullIntervalName(N.label)}</span>
+                            <span class="full">${getFullIntervalName(N.label)}</span>
                         `;
                         sHtml += VOICE.frets[si] === f
                             ? `<b>${CONTENT}</b>`
@@ -479,20 +483,29 @@ const app2 = (function() {
                 return html + `<tr>${sHtml}</tr>`;
             }, '');
         
-        app2_voiceContainer.innerHTML = currentVoices
-            .filter((v, i) => i < 9)
-            .reduce((html, v, i) => html +
-                `<button
-                    onclick="
-                        app2.setCurrentVoiceNum(${i});
-                        app2.drawFigure();
-                        app2.strum();
-                    "
-                    ${i === currentVoiceNum ? 'class="active"' : ''}
-                >
-                    ${i + 1}
-                </button>`,
-            '');
+        app2_voiceContainer.innerHTML =
+            `
+                <div>
+                    <label for="voiceOne">
+                        Select voicing
+                    </label>
+                </div>
+            ` +
+            currentVoices
+                .filter((v, i) => i < 9)
+                .reduce((html, v, i) => html +
+                    `<button
+                        ${ i === 0 ? 'id="voiceOne"' : '' }
+                        onclick="
+                            app2.setCurrentVoiceNum(${i});
+                            app2.drawFigure();
+                            app2.strum();
+                        "
+                        ${i === currentVoiceNum ? 'class="active"' : ''}
+                    >
+                        ${i + 1}
+                    </button>`,
+                '');
         
         let type = [];
         if (VOICE.type) {

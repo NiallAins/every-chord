@@ -3,9 +3,19 @@
   justify-self: end;
 }
 .input-container {
+  display: grid;
+  grid-template-columns: auto auto;
   min-width: 364px;
   white-space: nowrap;
   padding-right: 0.5rem;
+
+  & > :first-child {
+    grid-column: span 2;
+  }
+}
+#app2_inputChord,
+.icon-play {
+  grid-row: 2;
 }
 
 .tuning-container {
@@ -14,8 +24,12 @@
   gap: 0.25rem;
   width: max-content;
   justify-self: end;
+
+  label {
+    padding-bottom: 0.125rem;
+  }
 }
-.tuning-container :first-child {
+.tuning-container :nth-child(2) {
   grid-column-start: 1;
   grid-column-end: 4;
 }
@@ -32,6 +46,7 @@ input {
   width: 100%;
   padding: 0.125rem 0.75rem;
   font-size: 1.125rem;
+  line-height: 1.5rem;
 }
 .fret-buttons button {
   font-size: 1.25rem;
@@ -80,8 +95,8 @@ input.error {
 .icon-play,
 .icon-play:after {
   position: relative;
-  bottom: 0.625rem;
-  left: 0.5rem;
+  bottom: -0.5rem;
+  left: -2rem;
   width: 0;
   height: 0;
   padding: 0;
@@ -177,8 +192,8 @@ input.error {
     background-color: black;
     border-color: white;
   }
-  td b span,
-  td i span {
+  td b .full,
+  td i .full {
     display: none;
     position: absolute;
     top: 0;
@@ -191,8 +206,8 @@ input.error {
     border-radius: 1rem;
     white-space: nowrap;
   }
-  td:hover b span,
-  td:hover i span {
+  td:hover b .full,
+  td:hover i .full {
     display: block;
   }
   td .num {
@@ -236,18 +251,20 @@ input.error {
 span.sharp {
   display: inline-block;
   padding: 0 2px 0 3px;
-  transform: scale(1.75, 1) translateY(-3px);
 }
 span.flat {
   display: inline-block;
   padding: 0 1px 0 2px;
-  transform: scale(1.5, 1.25) translateY(-1px);
+  transform: scale(1.75, 1.25) translateY(-1px);
+}
+td i .sharp {
+  padding-left: 0;
 }
 span.add {
   font-size: 0.75em;
 }
 #app2_savedContainer span.flat {
-  transform: scale(1.5, 1.25) translateY(-2px);
+  transform: scale(1.75, 1.25) translateY(-2px);
 }
 
 #app2_typeContainer {
@@ -409,6 +426,17 @@ span.add {
     grid-column-start: 1;
     grid-column-end: 3;
   }
+  .icon-play {
+    position: absolute;
+    bottom: 0.25rem;
+    left: 15rem;
+
+    &:hover,
+    &:focus {
+      left: calc(15rem - 1px);
+      bottom: calc(0.25rem - 1px);
+    }
+  }
   .tuning-container {
     justify-self: start;
     margin-top: 1rem;
@@ -418,6 +446,7 @@ span.add {
     margin: 0 0.5rem 0.5rem 0;
   }
   .input-container {
+    position: relative;
     min-width: unset;
     width: 100%;
   }
