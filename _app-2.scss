@@ -269,6 +269,10 @@ span.add {
 #app2_savedContainer span.flat {
   transform: scale(1.75, 1.25) translateY(-2px);
 }
+#app2_typeContainer span.flat {
+  margin-top: -0.375rem;
+}
+
 
 #app2_typeContainer {
   margin-top: 0.25rem;
@@ -278,7 +282,7 @@ span.add {
   width: fit-content;
   height: 2rem;
 }
-#app2_typeContainer span {
+#app2_typeContainer > span {
   font-style: italic;
   height: 1rem;
   padding-right: 1rem;
