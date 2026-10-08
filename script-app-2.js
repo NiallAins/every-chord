@@ -61,7 +61,6 @@ const app2 = (function() {
         currentVoices = [],
         currentNotes = [],
         currentVoiceNum = 0,
-        noteBuffer = [],
         noteTimeouts = [];
 
 

@@ -32,7 +32,7 @@ function updateTuning() {
 
     app2.setStringFreqs();
     
-    app1.update();
+    app1.update(true);
     app2.update();
 }
 

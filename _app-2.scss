@@ -115,7 +115,8 @@ input.error {
 .icon-play:hover,
 .icon-play:focus {
   border-width: 18px 21px;
-  left: calc(0.5rem - 1px);
+  left: calc(-2rem + 1px);
+  bottom: (calc(-0.5rem + 1px));
 }
 .icon-play:hover:after,
 .icon-play:focus:after {
@@ -251,6 +252,7 @@ input.error {
 span.sharp {
   display: inline-block;
   padding: 0 2px 0 3px;
+  font-family: Arial;
 }
 span.flat {
   display: inline-block;

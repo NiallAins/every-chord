@@ -166,13 +166,12 @@ const app1 = (function() {
         currentScale = 'Major',
         currentChord = -1,
         currentExtension = 3,
-        noteBuffer = [],
         noteTimeouts = [];
 
-    function update() {
+    function update(preventApp2Update) {
         getNotes();
         getChords();
-        drawFigure();
+        drawFigure(preventApp2Update);
     }
 
     function getNoteValue(note) {
@@ -305,7 +304,7 @@ const app1 = (function() {
         currentExtension = extension;
     }
 
-    function drawFigure() {
+    function drawFigure(preventApp2Update = false) {
         const MID_STRING = Math.floor(stringValues.length / 2) - 1;
         app1_inputContainer.innerHTML = `
             <div>
@@ -508,8 +507,10 @@ const app1 = (function() {
                 </button>
             `);
 
-            app2_inputChord.value = chordShort; 
-            app2.update();
+            if (!preventApp2Update) {
+                app2_inputChord.value = chordShort; 
+                app2.update();
+            }
         }
         app1_chords.innerHTML += `
             <div class="notes">
